@@ -1,24 +1,18 @@
-const  http = require('http');
+const express = require("express")
 
-const host = "localhost";
-const port = 8080
+const app = express();
 
-const tareas = [
-    { id: 1, description: "orar", state: true},
-    { id: 2, description: "trabajar", state: false },
-    { id: 3, description: "cobrar", state: true },
-    { id: 4, description: "viajar", state: true },
-    { id: 5, description: "pintar", state: false },
-    { id: 6, description: "patinar", state: true }
-  ];
+const mostrarTarea = require('./list-view-router')
+const editarTarea = require('./list-edit-router')
 
-  const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.write(JSON.stringify(tareas))
-    res.end();
-  });
-  
+app.get('/', (req, res) => {
+  res.send("Servidor con Express");
+})
 
-server.listen(port, host, () => {
-console.log(`servidor funcionando en http://${host}:${port}`)
+app.use(express.json());
+app.use('/mostrarTarea', mostrarTarea);
+app.use('/editarListaTarea', editarTarea);
+
+app.listen(8080, () => {
+  console.log('Servidor corriendo en el puerto 8080')
 });
